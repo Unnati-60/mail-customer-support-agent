@@ -1,0 +1,20 @@
+services:
+  backend:
+    container_name: customer-agent-backend
+    build: 
+      context: ./agent-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./agent-backend/.env
+
+  frontend:
+    container_name: customer-agent-ui
+    build: 
+      context: ./agent-ui
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
