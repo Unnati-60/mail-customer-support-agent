@@ -23,4 +23,6 @@ class Settings(BaseSettings):
         description="Project name for Comet ML and Opik tracking.",
     )
 
+    POSTGRES_URL: str = "postgresql://postgres:Unnati24$@localhost:5432/CustomerSupportAgent"
+
 settings = Settings()

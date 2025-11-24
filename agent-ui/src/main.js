@@ -3,14 +3,14 @@ const API_BASE_URL = 'http://localhost:8000'; // Change this to your backend URL
 
 // API Service
 const chatAPI = {
-    async sendMessage(message) {
+    async sendMessage(customer_mail) {
         const response = await fetch(`${API_BASE_URL}/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                message: message
+                customer_mail: customer_mail
             })
         });
 
@@ -40,9 +40,9 @@ function showLoader(show) {
     }
 }
 
-function showError(message) {
+function showError(customer_mail) {
     const errorMsg = document.getElementById('errorMsg');
-    errorMsg.textContent = `Error: ${message}`;
+    errorMsg.textContent = `Error: ${customer_mail}`;
     errorMsg.style.display = 'block';
 }
 

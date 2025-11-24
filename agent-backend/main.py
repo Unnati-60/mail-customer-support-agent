@@ -5,20 +5,26 @@ from src.infrastructure.opik_utils import configure
 
 import asyncio
 class ChatMessage(BaseModel):
-    message: str
-    user_query: str 
+    customer_email: str 
 
+mail  = """
+Hi SwiftCart Team,
+
+I hope you’re doing well. I recently ordered an iPhone 14 and the order ID is 1. I received the confirmation message, but I just wanted to check on the shipping details. Could you please share the current status of my shipment and the expected delivery date?
+
+Thanks a lot,
+Amit Sharma
+"""
 
 async def main():
 
+
     chat_message = ChatMessage(
-        message="",
-        user_query="What is the return policy for online purchases?"
+        customer_email=mail
     )
     try:
         response, _ = await get_response(
-                messages=chat_message.message,
-                user_query=chat_message.user_query
+                customer_email=chat_message.customer_email
             )
         print(f"Response: \n{response}")
     except Exception as e:

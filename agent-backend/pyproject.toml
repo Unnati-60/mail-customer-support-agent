@@ -9,7 +9,10 @@ dependencies = [
     "langchain-groq>=1.0.0",
     "langgraph>=1.0.2",
     "opik>=1.9.3",
+    "pandas>=2.3.3",
+    "psycopg2-binary>=2.9.11",
     "pydantic>=2.12.4",
     "pydantic-settings>=2.11.0",
+    "sqlalchemy>=2.0.44",
     "uvicorn>=0.38.0",
 ]

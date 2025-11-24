@@ -35,19 +35,41 @@ class Prompt:
 
 # ===== PROMPTS =====
 
-# Answer query prompt
-_ANSWER_QUERY_PROMPT = """
-You are an expert customer support agent. 
-- Given user query, write a email response to the user's question.
-- Use the provided tools to gather any necessary information to answer the user's question.
+# Extract query prompt
+_EXTRACT_CLASSIFY_QUERY_PROMPT = """
+You are a customer support assistant. Analyze the customer's email and extract the query & classify it:
 
-User Query: {{user_query}}
+1. Extract "query": the core question or request in one sentence.
+2. "category": choose one:
+   - "needs_db" → requires checking database records, order status, invoices, account info, history, transactions, profile details, etc.
+   - "general" → can be answered without any data lookup.
+
+Return a JSON object: {"query": "...", "category": "..."}.
+Only output JSON.
+
+Customer Email: {{customer_email}}
+
 """
-
-ANSWER_QUERY_PROMPT = Prompt(
-    name="  answer_query_prompt",
-    prompt=_ANSWER_QUERY_PROMPT,
+EXTRACT_CLASSIFY_QUERY_PROMPT = Prompt(
+    name="extract_classify_query_prompt",    
+    prompt=_EXTRACT_CLASSIFY_QUERY_PROMPT,
 )
+
+# #Claasify query prompt
+# _CLASSIFY_QUERY_PROMPT = """
+# You are a customer support query classifier. Analyze the customer's query and determine if it requires database access to answer.
+# Customer Query: {{customer_query}}
+# If query can be answered with general knowledge then choose 'general'
+# or if it requires specific data from the database then choose 'needs_db'.
+
+# Respond with ONLY one word: 'needs_data' or 'general' """
+
+# CLASSIFY_QUERY_PROMPT = Prompt(
+#     name="classify_query_prompt",
+#     prompt=_CLASSIFY_QUERY_PROMPT,
+# )
+
+
 
 # write sql prompt
 _SQL_PROMPT = """
@@ -72,13 +94,13 @@ _REFLECT_SQL_PROMPT = """
 You are a SQL reviewer and refiner.
 
     User asked:
-    {{question}}
+    {{customer_query}}
 
     Original SQL:
-    {{sql_query}}
+    {{sql_query_v1}}
 
     SQL Output:
-    {{sql_output}}
+    {{sql_output_v1}}
 
     Table Schema:
     {{schema}}
@@ -96,16 +118,24 @@ REFLECT_SQL_PROMPT = Prompt(
     prompt=_REFLECT_SQL_PROMPT,
 )
 
-# # Write email prompt
-# _EMAIL_PROMPT = """       
-# You are an expert customer support agent. Given the following user query and the answer retrieved from the database, write a professional and empathetic email response to the user's question.
-# User Query: {user_query}        
-# Answer from Database: {db_answer}      
-# """
-# EMAIL_PROMPT = Prompt(
-#     name="email_prompt",
-#     prompt=_EMAIL_PROMPT,
-# )
+# Write email prompt
+_EMAIL_PROMPT = """       
+You are a helpful customer support agent. Write a professional, friendly email response to the customer.  
+Make sure to address the customer's original query and incorporate any relevant data retrieved from the database.
+
+Original customer email:
+{{customer_email}}
+
+customer query:
+{{customer_query}}
+
+Retrieved Data from Database:
+{{retrieved_data}}
+"""
+EMAIL_PROMPT = Prompt(
+    name="email_prompt",
+    prompt=_EMAIL_PROMPT,
+)
 
 
 # --- Evaluation ---

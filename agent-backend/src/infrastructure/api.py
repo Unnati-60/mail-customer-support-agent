@@ -30,14 +30,13 @@ app.add_middleware(
 )
 
 class ChatMessage(BaseModel):
-    message: str
+    customer_mail: str
 
 @app.post("/chat")
 async def chat(chat_message: ChatMessage):
     try:
         response, _ = await get_response(
-            messages=chat_message.message,
-            user_query=chat_message.message
+            customer_email=chat_message.customer_mail
         )
         return {"response": response}
     except Exception as e:
