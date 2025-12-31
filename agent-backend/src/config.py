@@ -25,4 +25,6 @@ class Settings(BaseSettings):
 
     POSTGRES_URL: str = "postgresql://postgres:Unnati24$@localhost:5432/CustomerSupportAgent"
 
+     # --- Paths Configuration ---
+    EVALUATION_DATASET_FILE_PATH: Path = Path("data/evaluation_dataset.json")
 settings = Settings()

@@ -3,6 +3,7 @@ import os
 import opik
 import logging
 from opik.configurator.configure import OpikConfigurator
+from opik.rest_api.core.api_error import ApiError
 
 from src.config import settings
 
@@ -38,3 +39,34 @@ def configure() -> None:
         logging.warning(
             "COMET_API_KEY and COMET_PROJECT are not set. Set them to enable prompt monitoring with Opik (powered by Comet ML)."
         )
+
+def get_dataset(name: str) -> opik.Dataset | None:
+    client = opik.Opik()
+    try:
+        dataset = client.get_dataset(name=name)
+    except Exception:
+        dataset = None
+
+    return dataset
+
+
+def create_dataset(name: str, description: str, items: list[dict]) -> opik.Dataset:
+    client = opik.Opik()
+    
+    try:
+        client.get_dataset(name=name)
+        # If we reach here, dataset exists
+        client.delete_dataset(name=name)
+
+    except ApiError as e:
+        if e.status_code == 404:
+            # Dataset does not exist → safe to create
+            pass
+        else:
+            raise
+
+    print(items)
+    dataset = client.create_dataset(name=name, description=description)
+    dataset.insert(items)
+
+    return dataset

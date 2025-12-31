@@ -10,6 +10,7 @@ from src.application.workflow.graph import (
 )
 from src.application.workflow.state import AgentState
 from src.config import settings
+from datetime import date
 
 
 async def get_response(
@@ -30,51 +31,12 @@ async def get_response(
         output_state = await graph.ainvoke(
                 input={
                     "customer_email": customer_email,
+                    "current_date": str(date.today().isoformat()),
                     "db_client": None,
                 },
                 config=config
             )
-        last_message = output_state["response_email"]
-        return last_message, AgentState(**output_state)
+        response_email = output_state["response_email"]
+        return response_email, AgentState(**output_state)
     except Exception as e:
         raise RuntimeError(f"Error running conversation workflow: {str(e)}") from e
-
-
-# def __format_messages(
-#     messages: Union[str, list[dict[str, Any]]],
-# ) -> list[Union[HumanMessage, AIMessage]]:
-#     """Convert various message formats to a list of LangChain message objects.
-
-#     Args:
-#         messages: Can be one of:
-#             - A single string message
-#             - A list of string messages
-#             - A list of dictionaries with 'role' and 'content' keys
-
-#     Returns:
-#         List[Union[HumanMessage, AIMessage]]: A list of LangChain message objects
-#     """
-
-#     if isinstance(messages, str):
-#         return [HumanMessage(content=messages)]
-
-#     if isinstance(messages, list):
-#         if not messages:
-#             return []
-
-#         if (
-#             isinstance(messages[0], dict)
-#             and "role" in messages[0]
-#             and "content" in messages[0]
-#         ):
-#             result = []
-#             for msg in messages:
-#                 if msg["role"] == "user":
-#                     result.append(HumanMessage(content=msg["content"]))
-#                 elif msg["role"] == "assistant":
-#                     result.append(AIMessage(content=msg["content"]))
-#             return result
-
-#         return [HumanMessage(content=message) for message in messages]
-
-#     return []

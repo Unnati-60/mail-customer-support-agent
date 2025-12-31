@@ -1,0 +1,57 @@
+[
+    {
+        "customer_mail": "Subject: Need update on my MacBook Air delivery\n\nHi Team,\nI placed an order for the MacBook Air M2 last week and received the dispatch message, but ever since then the tracking hasn’t moved. It has been showing “in transit – arriving soon” for two full days now. Considering the price and importance of this purchase, this delay is stressing me out because I urgently need the laptop for remote office work starting next week.\n\nCould you please check the exact delivery status with the courier and let me know whether it is delayed or on schedule? If possible, please share the expected delivery timeline so I can plan accordingly.\n\nOrder was placed on 7th February under my account (Rohan Mehta).\nHoping for a quick response.\nRegards,\nRohan",
+        "expected_sql": ["SELECT o.order_id, o.delivery_status, s.carrier, s.tracking_number, s.expected_delivery, s.delivery_date FROM orders o LEFT JOIN shipments s ON o.order_id = s.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.name = 'Rohan Mehta' ORDER BY o.order_date DESC LIMIT 1;"],
+        "expected_sql_output": [],
+        "query_type": "needs_db",
+        "labels": ["order_status" ]
+    },
+    {
+        "customer_mail": "Subject: Clarification regarding return policy for laptops\n\nHello,\nI’ve been going through your website FAQ, but it’s a little confusing to understand the exact return rules. I’m considering buying a laptop from your store this month, but before I order I want to know something clearly: if I am not satisfied with the performance or I simply find that it doesn’t suit my workload, can I return it within a certain period?\n\nSome stores allow returns only for defects and not for preference-based dissatisfaction. Could you please confirm how your return window works, especially for high-value products like laptops? And whether refunds are initiated to the original payment method or only store credits?\n\nThanks in advance,\nPriya",
+        "expected_sql": [],
+        "query_type": "general",
+        "labels": ["Return/Policy"]
+    },
+    {
+        "customer_mail": "Subject: Money deducted but showing payment pending!\n\nHi Support,\nI ordered an Apple USB-C 30W charger yesterday night. The payment went through instantly via Google Pay (UPI) and my bank confirmed the deduction. However, on my orders page it still shows “payment pending” and “waiting for confirmation.” I’m unsure if the order is valid and I do NOT want to reorder and get charged twice.\n\nCan you please check your system and confirm whether the payment is successful and whether the order is valid? If there’s an issue, should I reorder or wait? I have screenshots if needed.\n\nRegards,\nSneha",
+        "expected_sql": [],
+        "query_type": "needs_db",
+        "labels": ["Payment status mismatch - corrupted data"]
+    },
+    {
+        "customer_mail": "Subject: Urgent: Need confirmation on Dell XPS 13 availability\n\nHi Team,\nI’m planning to purchase the Dell XPS 13 (16GB RAM / 512GB SSD) immediately. I saw the item on your store but I’m not sure whether it’s really available or out of stock.\n\nBefore I place the order, can you please confirm:\n1. Is it currently in stock?\n2. If not, when are you expecting fresh stock?\n3. Is there any waitlist/notification option available?\n\nWarm regards,\nVikram",
+        "expected_sql": ["SELECT name, stock FROM products WHERE name = 'Dell XPS 13';"],
+        "query_type": "needs_db",
+        "labels": ["Stock/Availability"]
+    },
+    {
+        "customer_mail": "Subject: Warranty details for chargers and headphones\n\nHello,\nI am comparing multiple headphone models and also planning to purchase an original fast charger for my phone. Before finalizing, I wanted to know about warranty details for these categories.\n\nDo headphones (especially Sony WH-1000XM5) have manufacturer warranty or store warranty? And does the charger also come with warranty? If so, what is the coverage period, exclusions, and claim process?\n\nThank you,\nArjun",
+        "expected_sql": [],
+        "query_type": "general",
+        "labels": ["Warranty Information"]
+    },
+    {
+        "customer_mail": "Subject: My Samsung TV is delayed — need explanation\n\nHi Support Team,\nI ordered the Samsung 55-inch QLED TV and the tracking showed an expected delivery date of 14 February, but today is 15th and there is no update. I took a day off yesterday just to receive the delivery and nobody informed me about any delay.\n\nCould you please check what happened and provide a realistic delivery date, not generic status messages?\n\nOrder placed on 9 February under the name Arjun Singh.\nThanks,\nArjun Singh",
+        "expected_sql": ["SELECT o.order_id, o.delivery_status, s.carrier, s.tracking_number, s.expected_delivery, s.delivery_date FROM orders o LEFT JOIN shipments s ON o.order_id = s.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.name = 'Arjun Singh' AND o.order_date = '2025-02-09';"],
+        "query_type": "needs_db",
+        "labels": ["Late Delivery"]
+    },
+    {
+        "customer_mail": "Subject: Your customer care number NEVER works\n\nThis is extremely frustrating. I have been trying to call customer care for the last three days and every single time the IVR says “all agents are busy” and then disconnects. I tried multiple time slots and nothing works.\n\nIf customer support isn’t available then don’t advertise it. Please respond because this service experience has been very disappointing.\nAmit",
+        "expected_sql": [],
+        "query_type": "general",
+        "labels": ["Frustrated general complaint"]
+    },
+    {
+        "customer_mail": "Subject: Billed amount seems wrong for my iPhone order\n\nHi Team,\nI placed an order for the iPhone 14 recently. The price listed on your website was ₹79,999 but my bank SMS shows ₹80,999 charged.\n\nCan you please confirm whether this extra ₹1,000 is due to taxes, fees or a billing error? If it is an error please initiate a correction or partial refund. Please share the complete breakdown of the charged amount.\n\nRegards,\nAmit Sharma",
+        "expected_sql": ["SELECT o.order_id, o.total_amount AS order_amount, p.amount AS payment_amount FROM orders o JOIN payments p ON o.order_id = p.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.name = 'Amit Sharma' ORDER BY o.order_date DESC LIMIT 1;"],
+        "query_type": "needs_db",
+        "labels": ["Overcharged vs invoice - inconsistent info"]
+    },
+    {
+        "customer_mail": "Subject: No tracking number for my charger order\n\nHi,\nI ordered the USB-C Fast Charger and received the order confirmation but there is no shipment information or tracking ID anywhere. The app shows “awaiting courier details.” I need the charger urgently for travel and I'm worried it hasn’t been dispatched.\n\nCould you please verify whether the item has been shipped and share the courier name, tracking number, and estimated delivery date?\n\nThanks,\nSneha Kapoor",
+        "expected_sql": ["SELECT o.order_id, o.delivery_status , s.carrier, s.tracking_number FROM orders o LEFT JOIN shipments s ON o.order_id = s.order_id JOIN customers c ON o.customer_id = c.customer_id WHERE c.name = 'Sneha Kapoor' ORDER BY o.order_date DESC LIMIT 1;"],
+        "query_type": "needs_db",
+        "labels": ["Missing shipment information - missing field"]
+    }
+]

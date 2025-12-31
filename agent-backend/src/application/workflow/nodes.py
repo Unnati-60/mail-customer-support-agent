@@ -10,7 +10,8 @@ async def extract_classify_query(state):
 
     response = await chain.ainvoke(
         {
-            "customer_email": state["customer_email"]
+            "customer_email": state["customer_email"],
+            "current_date": state.get("current_date")
         }
     )
 
@@ -58,7 +59,6 @@ async def reflect_on_SQL(state):
             "schema": state["db_schema"]
         }
     )
-    print("Reflection Response:", response.content)
     response= json.loads(response.content.strip().removeprefix("```json").removesuffix("```").strip())
 
     sql_v2 = response.get("refined_sql")
@@ -93,19 +93,3 @@ async def generate_response_email(state):
 
     return  {"response_email": response}
 
-
-
-# async def execute_sql(state):
-#     if state["db_client"] is None:
-#         state["db_client"] = PostgreDb()
-    
-#     database_client = state["db_client"]
-
-#     sql_query = state["sql_query_v1"] if state["refinement_attempts"] == 0 else state["sql_query_v2"]
-
-#     sql_output = database_client.execute_sql(sql_query)
-
-#     if state["refinement_attempts"] == 0:
-#         return {"sql_output_v1": sql_output}
-#     else:
-#         return {"sql_output_v2": sql_output}

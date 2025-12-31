@@ -56,7 +56,7 @@ class PostgreDb:
         return "\n".join(output)
 
 
-    def execute_sql(self, query: str)-> pd.DataFrame:
+    def execute_sql(self, query: str):
         """
         Executes SELECT queries and returns dataframe converted to list of dicts.
         """
@@ -72,6 +72,7 @@ class PostgreDb:
             return df
 
         except Exception as e:
+            print(f"SQL execution error: {e}")
             return pd.DataFrame({"error": [str(e)]})
 
 if __name__ == "__main__":

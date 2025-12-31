@@ -39,11 +39,12 @@ class Prompt:
 _EXTRACT_CLASSIFY_QUERY_PROMPT = """
 You are a customer support assistant. Analyze the customer's email and extract the query & classify it:
 
-1. Extract "query": the core question or request in one sentence.
+1. Extract "query": the core question or request in one sentence along with relevant details.
 2. "category": choose one:
    - "needs_db" → requires checking database records, order status, invoices, account info, history, transactions, profile details, etc.
    - "general" → can be answered without any data lookup.
-
+- today's date is {{current_date}}.
+- date must be mentioned in format YYYY-MM-DD.
 Return a JSON object: {"query": "...", "category": "..."}.
 Only output JSON.
 
@@ -55,31 +56,19 @@ EXTRACT_CLASSIFY_QUERY_PROMPT = Prompt(
     prompt=_EXTRACT_CLASSIFY_QUERY_PROMPT,
 )
 
-# #Claasify query prompt
-# _CLASSIFY_QUERY_PROMPT = """
-# You are a customer support query classifier. Analyze the customer's query and determine if it requires database access to answer.
-# Customer Query: {{customer_query}}
-# If query can be answered with general knowledge then choose 'general'
-# or if it requires specific data from the database then choose 'needs_db'.
-
-# Respond with ONLY one word: 'needs_data' or 'general' """
-
-# CLASSIFY_QUERY_PROMPT = Prompt(
-#     name="classify_query_prompt",
-#     prompt=_CLASSIFY_QUERY_PROMPT,
-# )
-
 
 
 # write sql prompt
 _SQL_PROMPT = """
     You are a SQL assistant. Given the schema and the user's question, write a SQL query for SQLite.
+    
 
     Schema:
     {{schema}}
 
     User question:
     {{question}}
+
 
     Respond with the SQL only.
 """
@@ -139,3 +128,55 @@ EMAIL_PROMPT = Prompt(
 
 
 # --- Evaluation ---
+_SQL_EVALUATION_PROMPT = """
+    You are an expert SQL evaluator.
+
+    Your task is to evaluate whether a GENERATED_SQL correctly answers the USER_QUESTION,
+    using EXPECTED_SQL and EXPECTED_SQL_OUTPUT as reference.
+
+    Focus on semantic correctness, not exact SQL string matching.
+
+    USER_QUESTION:
+    {user_query}
+
+    EXPECTED_SQL:
+    {expected_sql}
+
+    EXPECTED_SQL_OUTPUT:
+    {expected_sql_output}
+
+    GENERATED_SQL:
+    {generated_sql}
+
+    GENERATED_SQL_OUTPUT:
+    {generated_sql_output}
+
+    Evaluation Criteria:
+    1. Does the GENERATED_SQL retrieve the correct data needed to answer the USER_QUESTION?
+    2. Is the GENERATED_SQL semantically equivalent to EXPECTED_SQL?
+    3. Does the GENERATED_SQL_OUTPUT match or logically align with EXPECTED_SQL_OUTPUT?
+    4. Are all necessary joins, filters, and conditions correctly applied?
+    5. If no records exist, does the query correctly infer the answer from related tables?
+
+    Scoring Rules:
+    - Score should be between 0 and 1.
+    - Score = 1.0 → Fully correct, answers the question completely.
+    - Score = 0.5 → Partially correct, retrieves some but not all required data.
+    - Score = 0.0 → Incorrect, irrelevant, or misleading result.
+
+    If GENERATED_SQL_OUTPUT is empty but EXPECTED_SQL_OUTPUT is non-empty → score = 0.0
+    If both outputs are empty and logically correct → score = 1.0
+
+    Output Format (STRICT JSON ONLY):
+    {
+    "score": <float between 0 and 1>,
+    "verdict": "<correct | partially_correct | incorrect>",
+    "reasoning": "<short explanation>"
+    }
+
+"""
+
+SQL_EVALUATION_PROMPT = Prompt(
+    name="sql_evaluation_prompt",  
+    prompt=_SQL_EVALUATION_PROMPT,
+)
