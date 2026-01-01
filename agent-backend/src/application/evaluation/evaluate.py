@@ -8,7 +8,7 @@ from opik.evaluation.models import OpikBaseModel
 from opik.evaluation.metrics import BaseMetric, score_result
 from opik.evaluation.metrics import AnswerRelevance 
 from src.application.workflow.chains import build_chain
-from src.domain.prompt import SQL_EVALUATION_PROMPT
+from src.prompt import SQL_EVALUATION_PROMPT
 from src.config import settings
 from src.application.generate_response import get_response
 from src.application.workflow.state import AgentState, state_to_str

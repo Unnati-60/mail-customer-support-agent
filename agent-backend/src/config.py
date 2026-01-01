@@ -23,7 +23,7 @@ class Settings(BaseSettings):
         description="Project name for Comet ML and Opik tracking.",
     )
 
-    POSTGRES_URL: str = "postgresql://postgres:Unnati24$@localhost:5432/CustomerSupportAgent"
+    POSTGRES_URL: str
 
      # --- Paths Configuration ---
     EVALUATION_DATASET_FILE_PATH: Path = Path("data/evaluation_dataset.json")

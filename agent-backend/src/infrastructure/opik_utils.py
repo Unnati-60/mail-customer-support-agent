@@ -65,7 +65,6 @@ def create_dataset(name: str, description: str, items: list[dict]) -> opik.Datas
         else:
             raise
 
-    print(items)
     dataset = client.create_dataset(name=name, description=description)
     dataset.insert(items)
 

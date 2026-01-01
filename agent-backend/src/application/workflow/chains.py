@@ -3,7 +3,7 @@ from langchain_groq import ChatGroq
 
 
 from src.config import settings
-from src.domain.prompt import EXTRACT_CLASSIFY_QUERY_PROMPT, SQL_PROMPT, REFLECT_SQL_PROMPT, EMAIL_PROMPT
+from src.prompt import EXTRACT_CLASSIFY_QUERY_PROMPT, SQL_PROMPT, REFLECT_SQL_PROMPT, EMAIL_PROMPT
 
 def get_chat_model(temperature: float = 0.7, model_name: str = settings.GROQ_LLM_MODEL) -> ChatGroq:
     return ChatGroq(

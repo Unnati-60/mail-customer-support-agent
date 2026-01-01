@@ -1,6 +1,6 @@
 import json
 from src.application.workflow.chains import build_chain
-from src.domain.prompt import EXTRACT_CLASSIFY_QUERY_PROMPT, SQL_PROMPT, REFLECT_SQL_PROMPT, EMAIL_PROMPT
+from src.prompt import EXTRACT_CLASSIFY_QUERY_PROMPT, SQL_PROMPT, REFLECT_SQL_PROMPT, EMAIL_PROMPT
 from src.infrastructure.postgreDb import PostgreDb
 
 
