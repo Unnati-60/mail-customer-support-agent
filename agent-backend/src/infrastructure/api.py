@@ -32,13 +32,20 @@ app.add_middleware(
 class ChatMessage(BaseModel):
     customer_mail: str
 
-@app.post("/chat")
+@app.get("/health", tags=["health"])
+async def health_check():
+    return {
+        "status": "ok",
+        "service": "customer-support-agent",
+    }
+
+@app.post("/response")
 async def chat(chat_message: ChatMessage):
     try:
-        response, _ = await get_response(
+        response, state = await get_response(
             customer_email=chat_message.customer_mail
         )
-        return {"response": response}
+        return {"response": response, "agent_state": state}
     except Exception as e:
         opik_tracer = OpikTracer()
         opik_tracer.flush()
